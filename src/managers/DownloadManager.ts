@@ -1,8 +1,10 @@
 import { ScannerManager, ServerManager } from "@caboose/managers";
-import { ScannerEvents } from "@caboose/enums";
+import { ScannerEvents } from "@caboose/events";
 import logger from "@logger";
 import path from "path";
 import fs from "fs";
+
+import { CabooseSDK } from '@caboosemedia/sdk';
 
 import { execSync, exec } from 'child_process';
 
@@ -18,9 +20,9 @@ export class DownloadManager {
 
     }
 
-    public installPluginFromGitHub(url: string): void {
-        const gitRepository = url.split("/").slice(-1)[0].split(".")[0];
-        const gitUsername = url.split("/").slice(-2)[0];
+    public async installPluginFromGitHub(repository: string): Promise<CabooseSDK> {
+        const gitRepository = repository.split("/").slice(-1)[0].split(".")[0];
+        const gitUsername = repository.split("/").slice(-2)[0];
         const gitUsernameDir = path.join(this.serverManager.getDataDir(), "plugins", gitUsername);
         const gitRepositoryDir = path.join(gitUsernameDir, gitRepository);
         if (!fs.existsSync(gitRepositoryDir)) {
@@ -29,30 +31,28 @@ export class DownloadManager {
             });
         }
         if (!fs.existsSync(path.join(gitRepositoryDir, ".git"))) {
-            execSync(`git clone ${url}`, {
+            execSync(`git clone ${repository}`, {
                 cwd: gitUsernameDir
             });
             logger.debug(`Cloned ${gitUsername}/${gitRepository}`);
         } else {
-
-            // you need this commented out code
-            // currently disabled because awfully-salty-squid is terribly outdated
-
-            // execSync(`git fetch origin && git reset --hard`, {
-            //     cwd: gitRepositoryDir
-            // });
+            execSync(`git fetch origin && git reset --hard`, {
+                cwd: gitRepositoryDir
+            });
             logger.debug(`Updated ${gitUsername}/${gitRepository}`);
         }
         execSync(`yarn --cwd ${gitRepositoryDir} --modules-folder ${path.join(gitRepositoryDir, "node_modules")} install`);
         logger.debug(`Installed ${ gitUsername }/${gitRepository}`);
         //execSync(`yarn --cwd ${gitRepositoryDir} build`);
         logger.debug(`Built ${ gitUsername }/${gitRepository}`);
-        execSync(`yarn --cwd ${gitRepositoryDir} start`);
+        //execSync(`yarn --cwd ${gitRepositoryDir} start`);
+        const plugin = require(path.join(gitRepositoryDir, "lib", "index.js")).default;
+        return plugin;
     }
 
-    public uninstallPluginFromGitHub(url: string): void {
-        const gitRepository = url.split("/").slice(-1)[0].split(".")[0];
-        const gitUsername = url.split("/").slice(-2)[0];
+    public async uninstallPluginFromGitHub(repository: string): Promise<void> {
+        const gitRepository = repository.split("/").slice(-1)[0].split(".")[0];
+        const gitUsername = repository.split("/").slice(-2)[0];
         const gitUsernameDir = path.join(this.serverManager.getDataDir(), "plugins", gitUsername);
         const gitRepositoryDir = path.join(gitUsernameDir, gitRepository);
         if (fs.existsSync(gitRepositoryDir)) {

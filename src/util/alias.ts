@@ -3,7 +3,7 @@ import path from 'path';
 
 const srcDir = path.resolve(__dirname, '../');
 
-const mode = path.basename(srcDir) === 'dist' ? 'production' : 'development';
+const mode = path.basename(srcDir) === 'lib' ? 'production' : 'development';
 
 moduleAlias.addAliases({
     "@caboose": path.resolve(srcDir),

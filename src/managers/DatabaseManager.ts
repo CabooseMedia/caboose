@@ -1,5 +1,5 @@
 import { ScannerManager, ServerManager, FileManager } from '@caboose/managers';
-import { ScannerEvents } from "@caboose/enums";
+import { ScannerEvents } from "@caboose/events";
 import logger from "@logger";
 import path from "path";
 import { exec } from "child_process";

@@ -2,21 +2,22 @@
   "name": "caboose",
   "version": "1.0.0",
   "private": true,
-  "main": "/src/main.ts",
+  "main": "lib/index.js",
   "repository": "https://github.com/CabooseMedia/caboose.git",
   "author": "Isaac Robbins <isaacprobbins@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "node ./dist/main.js",
-    "dev": "ts-node-esm ./src/main.ts",
+    "start": "node lib/index.js",
+    "dev": "ts-node-esm src/index.ts",
     "generate": "prisma generate --schema=./src/databases/prisma/sqlite.prisma",
     "migrate:dev": "prisma migrate dev --schema=./src/databases/prisma/sqlite.prisma",
     "migrate:deploy": "prisma migrate deploy --schema=./src/databases/prisma/sqlite.prisma",
     "studio": "prisma studio --schema=./src/databases/prisma/sqlite.prisma",
-    "build": "tsc -p .",
+    "build": "node_modules/.bin/rimraf lib && tsc -p . && node_modules/.bin/copyfiles -u 1 \"src/databases/prisma/**/*\" lib",
     "test": "jest"
   },
   "dependencies": {
+    "@caboosemedia/sdk": "^0.0.1-beta3",
     "@prisma/client": "^5.3.1",
     "@types/module-alias": "^2.0.2",
     "chokidar": "^3.5.3",
@@ -34,8 +35,10 @@
     "@jest/globals": "^29.6.3",
     "@types/express": "^4.17.17",
     "babel-jest": "^29.6.3",
+    "copyfiles": "^2.4.1",
     "jest": "^29.6.3",
     "prisma": "^5.3.1",
+    "rimraf": "^5.0.4",
     "ts-jest": "^29.1.1",
     "typescript": "^5.1.6"
   }

@@ -6,7 +6,7 @@ import { EventEmitter } from 'events';
 
 import { CabooseScanner, LinuxScanner, WSLScanner, WindowsScanner } from "@caboose/scanners";
 import { ServerManager } from "@caboose/managers";
-import { ScannerEvents } from "@caboose/enums";
+import { ScannerEvents } from "@caboose/events";
 
 export class ScannerManager extends EventEmitter {
 

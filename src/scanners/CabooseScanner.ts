@@ -1,5 +1,5 @@
 import { ScannerManager, ServerManager } from "@caboose/managers";
-import { ScannerEvents } from "@caboose/enums";
+import { ScannerEvents } from "@caboose/events";
 import fs from "fs";
 import path from "path";
 

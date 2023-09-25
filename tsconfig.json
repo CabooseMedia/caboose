@@ -2,7 +2,7 @@
     "compilerOptions": {
         "target": "es6",
         "module": "commonjs",
-        "outDir": "dist",
+        "outDir": "lib",
         "strict": true,
         "esModuleInterop": true,
         "moduleResolution": "node",
@@ -23,8 +23,8 @@
             "@caboose/interfaces": [
                 "interfaces/index"
             ],
-            "@caboose/enums": [
-                "enums/index"
+            "@caboose/events": [
+                "events/index"
             ],
             "@caboose/databases": [
                 "databases/index"
