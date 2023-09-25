@@ -1,0 +1,43 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "outDir": "dist",
+        "strict": true,
+        "esModuleInterop": true,
+        "moduleResolution": "node",
+        "baseUrl": "src",
+        "paths": {
+            "@logger": [
+                "util/log"
+            ],
+            "@util/*": [
+                "util/*"
+            ],
+            "@caboose/scanners": [
+                "scanners/index"
+            ],
+            "@caboose/managers": [
+                "managers/index"
+            ],
+            "@caboose/interfaces": [
+                "interfaces/index"
+            ],
+            "@caboose/enums": [
+                "enums/index"
+            ],
+            "@caboose/databases": [
+                "databases/index"
+            ],
+            "@databases/*": [
+                "databases/prisma/generated/*"
+            ]
+        }
+    },
+    "include": [
+        "src/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}
