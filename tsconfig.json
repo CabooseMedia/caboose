@@ -24,18 +24,9 @@
             "@caboose/events": [
                 "events/index"
             ],
-            // "@caboose/interfaces": [
-            //     "interfaces/index"
-            // ],
             "@caboose/types": [
                 "types/index"
-            ],
-            // "@caboose/databases": [
-            //     "databases/index"
-            // ],
-            // "@databases/*": [
-            //     "databases/prisma/generated/*"
-            // ]
+            ]
         }
     },
     "include": [

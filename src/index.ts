@@ -1,10 +1,7 @@
 import 'dotenv/config';
 import './util/alias';
 
-import selfsigned from 'selfsigned';
-import fs from 'fs';
 import path from 'path';
-import crypto from 'crypto';
 
 import logger from '@logger';
 import { CabooseServer } from '@caboose/server';
@@ -20,9 +17,9 @@ async function start() {
     UNIVERSAL.CONTENT_DIR = path.resolve(UNIVERSAL.ROOT_DIR, 'content');
     UNIVERSAL.DATA_DIR = path.resolve(UNIVERSAL.ROOT_DIR, 'data');
 
-    const serverManager = new CabooseServer();
+    const caboose = new CabooseServer();
 
-    await serverManager.start();
+    await caboose.start();
 
     logger.info("Caboose is ready! Enjoy!");
 
