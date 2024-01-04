@@ -1,10 +1,8 @@
-import { ServerManager } from "./ServerManager";
-import { ScannerManager } from "./ScannerManager";
-import { FileManager } from "./FileManager";
-import { DatabaseManager } from "./DatabaseManager";
-import { DownloadManager } from "./DownloadManager";
-import { PluginManager } from "./PluginManager";
+import { Manager } from "./Manager";
+import { ExpressManager } from "./ExpressManager";
+import { RouteManager } from "./RouteManager";
+import { SocketManager } from "./SocketManager";
 
 export {
-    ServerManager, ScannerManager, FileManager, DatabaseManager, DownloadManager, PluginManager
+    Manager, ExpressManager, RouteManager, SocketManager
 }

@@ -3,17 +3,17 @@ import path from 'path';
 
 const srcDir = path.resolve(__dirname, '../');
 
-const mode = path.basename(srcDir) === 'lib' ? 'production' : 'development';
-
 moduleAlias.addAliases({
     "@caboose": path.resolve(srcDir),
+    "@caboose/server": path.resolve(srcDir, "CabooseServer"),
+    "@util": path.resolve(srcDir, "util"),
     "@logger": path.resolve(srcDir, "util", "log"),
-    "@managers": path.resolve(srcDir, "managers"),
-    "@databases": path.resolve(srcDir, "databases", "prisma", "generated")
 });
 
 import logger from '@logger';
 
-logger.debug(`Currently running in ${mode} mode. Aliases set to ${path.resolve(srcDir)}`);
+logger.debug(`Server currently running in ${process.env.NODE_ENV} mode. Aliases set to ${path.resolve(srcDir)}`);
+
+logger.silly('Aliases successfully imported and initialized.');
 
 process.env.SRC = path.basename(srcDir);

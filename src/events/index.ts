@@ -1,6 +1,12 @@
-import { ScannerEvents } from "./ScannerEvents"
-import { FileEvents } from "./FileEvents"
+import { ManagerEvents } from "./ManagerEvents";
+import { ServerEvents } from "./ServerEvents";
+
+export const Events = {
+    Manager: ManagerEvents,
+    Server: ServerEvents
+}
 
 export {
-    ScannerEvents, FileEvents
+    ManagerEvents,
+    ServerEvents
 }

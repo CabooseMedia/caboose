@@ -1,38 +1,31 @@
 import 'dotenv/config';
 import './util/alias';
 
+import selfsigned from 'selfsigned';
+import fs from 'fs';
+import path from 'path';
+import crypto from 'crypto';
+
 import logger from '@logger';
-import express from 'express';
+import { CabooseServer } from '@caboose/server';
+import { UNIVERSAL } from '@util/universal';
 
-import { ServerManager } from '@caboose/managers';
+logger.debug("All imports loaded successfully. Starting Caboose...");
 
-const server = express();
+async function start() {
 
-function init() {
+    logger.info("Welcome to Caboose! Getting things ready...");
 
-    logger.debug(`Initializing server`);
+    UNIVERSAL.ROOT_DIR = path.resolve(__dirname, '..', '..');
+    UNIVERSAL.CONTENT_DIR = path.resolve(UNIVERSAL.ROOT_DIR, 'content');
+    UNIVERSAL.DATA_DIR = path.resolve(UNIVERSAL.ROOT_DIR, 'data');
 
-    const serverManager = new ServerManager();
+    const serverManager = new CabooseServer();
 
-    startServer(serverManager);
+    await serverManager.start();
 
-}
-
-function startServer(serverManager: ServerManager) {
-
-    server.get('/api/v1/directory', (req, res) => {
-        const directoryPath = req.query.path as string ?? "/";
-        const directoryContents = serverManager.getFileManager().getDirectoryContents(directoryPath);
-        res.json(directoryContents);
-    });
-
-    server.listen(process.env.CABOOSE_SERVER_PORT, () => {
-        logger.info(`Server listening on port ${process.env.CABOOSE_SERVER_PORT}`);
-        //serverManager.getPluginManager().uninstallPlugin("https://github.com/HackboxGames/HackboxServer.git");
-        //serverManager.getPluginManager().uninstallPlugin("https://raw.githubusercontent.com/CabooseMedia/caboose-plugin-filebrowser/main/manifest.json");
-        serverManager.getPluginManager().installPlugin("https://raw.githubusercontent.com/CabooseMedia/caboose-plugin-template/main/manifest.json");
-    });
+    logger.info("Caboose is ready! Enjoy!");
 
 }
 
-init();
+start();
