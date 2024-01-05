@@ -12,7 +12,7 @@ moduleAlias.addAliases({
 
 import logger from '@logger';
 
-logger.debug(`Server currently running in ${process.env.NODE_ENV} mode. Aliases set to ${path.resolve(srcDir)}`);
+logger.debug(`Server currently running in ${process.env.CABOOSE_SERVER_ENV} mode. Aliases set to ${path.resolve(srcDir)}`);
 
 logger.silly('Aliases successfully imported and initialized.');
 

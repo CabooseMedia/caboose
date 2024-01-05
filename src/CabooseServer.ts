@@ -1,7 +1,7 @@
 import logger from "@logger";
 
 import { EventEmitter } from 'events';
-import { ExpressManager, Manager, RouteManager, SocketManager } from "@caboose/managers";
+import { DownloadManager, ExpressManager, Manager, RouteManager, SocketManager, WebManager } from "@caboose/managers";
 import { EventType } from "@caboose/types";
 import { ServerEvents } from "@caboose/events";
 
@@ -11,6 +11,8 @@ export class CabooseServer extends EventEmitter {
     private expressManager: ExpressManager;
     private routeManager: RouteManager;
     private socketManager: SocketManager;
+    private downloadManager: DownloadManager;
+    private webManager: WebManager;
 
     constructor() {
         super();
@@ -18,11 +20,15 @@ export class CabooseServer extends EventEmitter {
         this.expressManager = new ExpressManager(this);
         this.routeManager = new RouteManager(this);
         this.socketManager = new SocketManager(this);
+        this.downloadManager = new DownloadManager(this);
+        this.webManager = new WebManager(this);
 
         this.managers = [
             this.expressManager,
             this.routeManager,
             this.socketManager,
+            this.downloadManager,
+            this.webManager
         ];
 
         this.emit(ServerEvents.INITIALIZED);
@@ -30,8 +36,17 @@ export class CabooseServer extends EventEmitter {
 
     public async start(): Promise<void> {
         logger.debug("Starting managers...");
+        await this.setupManagers();
         await this.startManagers();
         this.emit(ServerEvents.READY);
+    }
+
+    public async setupManagers(): Promise<void> {
+        const promises = [];
+        for (const manager of this.managers) {
+            promises.push(manager.setup());
+        }
+        await Promise.all(promises);
     }
     
     public async startManagers(): Promise<void> {
@@ -52,6 +67,14 @@ export class CabooseServer extends EventEmitter {
 
     public getSocketManager(): SocketManager {
         return this.socketManager;
+    }
+
+    public getDownloadManager(): DownloadManager {
+        return this.downloadManager;
+    }
+
+    public getWebManager(): WebManager {
+        return this.webManager;
     }
 
     public emit(event: EventType, ...args: any[]): boolean {

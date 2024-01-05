@@ -62,7 +62,7 @@ export class ExpressManager extends Manager {
 
     public async onStart(): Promise<void> {
         this.expressApp.all('*', (req, res) => {
-            this.caboose.getRouteManager().handleRoute(req, res);
+            this.caboose.getRouteManager().handleAll(req, res);
         });
         this.expressServer.listen(this.serverPort, () => {
             logger.debug(`Express server listening on port ${this.serverPort}`);

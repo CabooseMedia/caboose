@@ -7,8 +7,8 @@
   "author": "Isaac Robbins <isaacprobbins@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "cross-env NODE_ENV=production node dist/index.js",
-    "dev": "cross-env NODE_ENV=development ts-node src/index.ts",
+    "start": "cross-env CABOOSE_SERVER_ENV=production node dist/index.js",
+    "dev": "cross-env CABOOSE_SERVER_ENV=development ts-node src/index.ts",
     "generate": "prisma generate --schema=./src/databases/prisma/sqlite.prisma",
     "migrate:dev": "prisma migrate dev --schema=./src/databases/prisma/sqlite.prisma",
     "migrate:deploy": "prisma migrate deploy --schema=./src/databases/prisma/sqlite.prisma",

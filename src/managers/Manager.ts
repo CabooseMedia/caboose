@@ -18,6 +18,14 @@ export class Manager extends EventEmitter {
         });
     }
 
+    public async setup(): Promise<void> {
+        await this.onSetup();
+
+        this.emit(ManagerEvents.SETUP, {
+            name: this.constructor.name,
+        });
+    }
+
     public async start(): Promise<void> {
         await this.onStart();
 
@@ -27,6 +35,10 @@ export class Manager extends EventEmitter {
     }
 
     public initialize(): void {
+        // Override this method
+    }
+
+    public async onSetup(): Promise<void> {
         // Override this method
     }
 

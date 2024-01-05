@@ -17,6 +17,13 @@ async function start() {
     UNIVERSAL.CONTENT_DIR = path.resolve(UNIVERSAL.ROOT_DIR, 'content');
     UNIVERSAL.DATA_DIR = path.resolve(UNIVERSAL.ROOT_DIR, 'data');
 
+    UNIVERSAL.CERTS_DIR = path.resolve(UNIVERSAL.DATA_DIR, 'certs');
+    UNIVERSAL.LOGS_DIR = path.resolve(UNIVERSAL.DATA_DIR, 'logs');
+    UNIVERSAL.WEB_DIR = path.resolve(UNIVERSAL.DATA_DIR, 'web');
+
+    UNIVERSAL.HOST_WEB = ((process.env.HOST_WEB ?? "true") === "true");
+    UNIVERSAL.AUTOUPDATE_WEB = ((process.env.AUTOUPDATE_WEB ?? "true") === "true");
+
     const caboose = new CabooseServer();
 
     await caboose.start();
