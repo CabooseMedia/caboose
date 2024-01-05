@@ -2,7 +2,6 @@ import { Manager } from '@caboose/managers';
 import logger from "@logger";
 import { UNIVERSAL } from '@util/universal';
 import { Request, Response } from 'express';
-import path from 'path';
 
 export class RouteManager extends Manager {
 
