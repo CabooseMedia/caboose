@@ -24,7 +24,7 @@ export class DownloadManager extends Manager {
     }
 
     public async installNodeModules(dest: string): Promise<void> {
-        execSync(`yarn --cwd ${dest} --modules-folder ${path.join(dest, "node_modules")} install`);
+        execSync(`yarn --cwd ${dest} --modules-folder ${path.join(dest, "node_modules")} install --production=false`);
     }
 
     public async runBuildScript(dest: string): Promise<void> {
