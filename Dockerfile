@@ -52,6 +52,12 @@ FROM base as final
 # Use production node environment by default.
 ENV NODE_ENV production
 
+# chown the /data and /content directories to the node user.
+RUN mkdir -p /data && \
+    mkdir -p /content && \
+    chown -R node:node /data && \
+    chown -R node:node /content
+
 # Run the application as a non-root user.
 USER node
 
