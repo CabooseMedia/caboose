@@ -4,7 +4,7 @@ import { UNIVERSAL } from '@util/universal';
 import { Request, Response } from 'express';
 
 export class RouteManager extends Manager {
-
+    
     public handleAll(req: Request, res: Response): void {
         logger.debug(`Handling route ${req.path}`);
         if (UNIVERSAL.HOST_WEB) {
@@ -61,6 +61,11 @@ export class RouteManager extends Manager {
     public registerPATCHRoute(route: string, callback: (req: Request, res: Response) => void): void {
         this.caboose.getExpressManager().getExpressApp().patch(route, callback);
         logger.debug(`Registered PATCH route ${route}.`);
+    }
+
+    public registerALLRoute(route: string, callback: (req: Request, res: Response) => void): void {
+        this.caboose.getExpressManager().getExpressApp().all(route, callback);
+        logger.verbose(`Registered ALL route ${route}.`);
     }
 
 }

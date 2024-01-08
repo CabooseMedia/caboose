@@ -28,6 +28,13 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=cache,target=/root/.yarn \
     yarn install --production --frozen-lockfile
 
+#Copy package.json so that package manager commands can be used.
+COPY package.json .
+# Copy prisma schema
+COPY prisma ./prisma
+# Generate prisma client
+RUN yarn prisma:generate
+
 ################################################################################
 # Create a stage for building the application.
 FROM deps as build
@@ -42,7 +49,7 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 # Copy the rest of the source files into the image.
 COPY . .
 # Run the build script.
-RUN yarn run build
+RUN yarn build
 
 ################################################################################
 # Create a new stage to run the application with minimal runtime dependencies
@@ -68,6 +75,7 @@ COPY package.json .
 # the built application from the build stage into the image.
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
+COPY --from=build /app/prisma ./prisma
 
 RUN git config --global --add safe.directory /data/web
 

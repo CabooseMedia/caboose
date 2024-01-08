@@ -42,11 +42,15 @@ export class WebManager extends Manager {
         if (shouldBuild) {
             logger.info("Installing the web repository dependencies...");
             await this.caboose.getDownloadManager().installNodeModules(path.resolve(UNIVERSAL.WEB_DIR));
-            logger.info("Building the web repository...");
+            logger.info("Generating the prisma client...");
+            await this.caboose.getDownloadManager().runPrismaGenerateScript(path.resolve(UNIVERSAL.WEB_DIR));
+            logger.info("Building website for production...");
             await this.caboose.getDownloadManager().runBuildScript(path.resolve(UNIVERSAL.WEB_DIR));
         }
+        logger.info("Loading the web repository...");
         const web = require(path.resolve(UNIVERSAL.WEB_DIR, "dist/export.js"));
         this.webHandler = await web.getRequestHandler();
+        logger.info("Web repository loaded.");
     }
 
     public getWebHandler(): any {

@@ -27,6 +27,10 @@ export class DownloadManager extends Manager {
         execSync(`yarn --cwd ${dest} --modules-folder ${path.join(dest, "node_modules")} install --production=false`);
     }
 
+    public async runPrismaGenerateScript(dest: string): Promise<void> {
+        execSync(`yarn --cwd ${dest} prisma:generate`);
+    }
+
     public async runBuildScript(dest: string): Promise<void> {
         execSync(`yarn --cwd ${dest} build`);
     }

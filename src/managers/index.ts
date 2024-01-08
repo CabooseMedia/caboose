@@ -5,7 +5,8 @@ import { SocketManager } from "./SocketManager";
 import { DownloadManager } from "./DownloadManager";
 import { WebManager } from "./WebManager";
 import { DatabaseManager } from "./DatabaseManager";
+import { APIManager } from "./APIManager";
 
 export {
-    Manager, ExpressManager, RouteManager, SocketManager, DownloadManager, WebManager, DatabaseManager
+    Manager, ExpressManager, RouteManager, SocketManager, DownloadManager, WebManager, DatabaseManager, APIManager
 }

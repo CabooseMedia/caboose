@@ -9,9 +9,9 @@
   "scripts": {
     "start": "cross-env CABOOSE_SERVER_ENV=production node dist/index.js",
     "dev": "cross-env CABOOSE_SERVER_ENV=development ts-node src/index.ts",
-    "prisma:generate": "prisma generate --schema=./src/prisma/postgres.prisma",
-    "prisma:migrate:dev": "prisma migrate dev --schema=./src/prisma/postgres.prisma",
-    "prisma:migrate:deploy": "prisma migrate deploy --schema=./src/prisma/postgres.prisma",
+    "prisma:generate": "prisma generate --schema=prisma/postgres.prisma",
+    "prisma:migrate:dev": "prisma migrate dev --schema=prisma/postgres.prisma",
+    "prisma:migrate:deploy": "prisma migrate deploy --schema=prisma/postgres.prisma",
     "build": "node_modules/.bin/rimraf dist && tsc -p .",
     "test": "jest"
   },
