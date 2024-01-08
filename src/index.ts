@@ -18,6 +18,7 @@ async function start() {
     UNIVERSAL.DATA_DIR = path.resolve(UNIVERSAL.ROOT_DIR, 'data');
 
     UNIVERSAL.CERTS_DIR = path.resolve(UNIVERSAL.DATA_DIR, 'certs');
+    UNIVERSAL.DATABASE_DIR = path.resolve(UNIVERSAL.DATA_DIR, 'database');
     UNIVERSAL.LOGS_DIR = path.resolve(UNIVERSAL.DATA_DIR, 'logs');
     UNIVERSAL.WEB_DIR = path.resolve(UNIVERSAL.DATA_DIR, 'web');
 

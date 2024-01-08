@@ -135,3 +135,6 @@ dist
 
 # Docker Compose
 docker-compose.yml
+
+# Prisma migrations
+src/prisma/migrations
