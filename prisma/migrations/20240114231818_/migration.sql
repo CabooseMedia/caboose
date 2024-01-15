@@ -31,8 +31,10 @@ CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "name" TEXT,
     "email" TEXT,
+    "password" TEXT,
     "emailVerified" TIMESTAMP(3),
     "image" TEXT,
+    "verified" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -42,6 +44,12 @@ CREATE TABLE "VerificationToken" (
     "identifier" TEXT NOT NULL,
     "token" TEXT NOT NULL,
     "expires" TIMESTAMP(3) NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "Invite" (
+    "email" TEXT,
+    "code" TEXT NOT NULL
 );
 
 -- CreateIndex
@@ -58,6 +66,15 @@ CREATE UNIQUE INDEX "VerificationToken_token_key" ON "VerificationToken"("token"
 
 -- CreateIndex
 CREATE UNIQUE INDEX "VerificationToken_identifier_token_key" ON "VerificationToken"("identifier", "token");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Invite_email_key" ON "Invite"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Invite_code_key" ON "Invite"("code");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Invite_email_code_key" ON "Invite"("email", "code");
 
 -- AddForeignKey
 ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

@@ -1,7 +1,7 @@
 import logger from "@logger";
 
 import { EventEmitter } from 'events';
-import { DownloadManager, ExpressManager, Manager, RouteManager, SocketManager, WebManager, DatabaseManager, APIManager } from "@caboose/managers";
+import { DownloadManager, ExpressManager, Manager, RouteManager, SocketManager, WebManager, DatabaseManager, APIManager, EmailManager, InviteManager } from "@caboose/managers";
 import { EventType } from "@caboose/types";
 import { ServerEvents } from "@caboose/events";
 
@@ -15,6 +15,8 @@ export class CabooseServer extends EventEmitter {
     private webManager: WebManager;
     private databaseManager: DatabaseManager;
     private apiManager: APIManager;
+    private emailManager: EmailManager;
+    private inviteManager: InviteManager;
 
     constructor() {
         super();
@@ -26,6 +28,8 @@ export class CabooseServer extends EventEmitter {
         this.webManager = new WebManager(this);
         this.databaseManager = new DatabaseManager(this);
         this.apiManager = new APIManager(this);
+        this.emailManager = new EmailManager(this);
+        this.inviteManager = new InviteManager(this);
 
         this.managers = [
             this.expressManager,
@@ -34,7 +38,9 @@ export class CabooseServer extends EventEmitter {
             this.downloadManager,
             this.webManager,
             this.databaseManager,
-            this.apiManager
+            this.apiManager,
+            this.emailManager,
+            this.inviteManager
         ];
 
         this.emit(ServerEvents.INITIALIZED);
@@ -89,6 +95,14 @@ export class CabooseServer extends EventEmitter {
 
     public getAPIManager(): APIManager {
         return this.apiManager;
+    }
+
+    public getEmailManager(): EmailManager {
+        return this.emailManager;
+    }
+
+    public getInviteManager(): InviteManager {
+        return this.inviteManager;
     }
 
     public emit(event: EventType, ...args: any[]): boolean {

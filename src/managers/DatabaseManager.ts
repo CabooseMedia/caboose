@@ -1,6 +1,7 @@
 import { Manager } from '@caboose/managers';
 import logger from "@logger";
 import { PrismaClient } from '@prisma/client'
+import jsonwebtoken from 'jsonwebtoken';
 
 import { execSync, exec } from 'child_process';
 

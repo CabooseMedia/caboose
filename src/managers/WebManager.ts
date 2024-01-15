@@ -20,8 +20,9 @@ export class WebManager extends Manager {
     public async onSetup(): Promise<void> {
         if (!UNIVERSAL.HOST_WEB) {
             logger.warn("You have not opted into hosting the web repository. (HOST_WEB is true by default)");
+            logger.warn("For now, this is not recommended.")
             logger.warn("To access the website, you'll need to host the web repository separately.");
-            logger.warn("All api routes will still work, but the website will not be accessible.");
+            logger.warn("Currently, account creation is only supported through the web repository.");
             return;
         }
         let shouldBuild = false;
