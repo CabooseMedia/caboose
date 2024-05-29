@@ -32,31 +32,36 @@ model Account {
 }
 
 model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String @id @default(cuid())
+  sessionId String @unique
+  userId    String
+  deviceId  String
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  device    Device @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+}
+
+model Device {
+  id         String    @id @default(cuid())
+  deviceId   String    @unique
+  userId     String
+  deviceName String?
+  deviceOS   String?
+  deviceIP   String?
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessions   Session[]
 }
 
 model User {
   id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  password      String?
-  emailVerified DateTime?
+  email         String    @unique
+  password      String
+  firstName     String?
+  lastName      String?
   image         String?
-  verified      Boolean   @default(false)
+  emailVerified Boolean   @default(false)
   accounts      Account[]
   sessions      Session[]
-}
-
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
+  devices       Device[]
 }
 
 model Invite {

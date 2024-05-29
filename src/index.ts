@@ -25,6 +25,8 @@ async function start() {
     UNIVERSAL.HOST_WEB = ((process.env.HOST_WEB ?? "true") === "true");
     UNIVERSAL.AUTOUPDATE_WEB = ((process.env.AUTOUPDATE_WEB ?? "true") === "true");
 
+    UNIVERSAL.JWT_SECRET = process.env.JWT_SECRET ?? "pleasedontguessmeiamverysecure";
+
     const caboose = new CabooseServer();
 
     await caboose.start();

@@ -5,6 +5,8 @@ import selfsigned from "selfsigned";
 import fs from "fs";
 import path from "path";
 import crypto from "crypto";
+import cors from "cors";
+import cookieParser from "cookie-parser";
 
 import { Manager } from "@caboose/managers";
 import { UNIVERSAL } from "@util/universal";
@@ -21,7 +23,6 @@ export class ExpressManager extends Manager {
     };
 
     public initialize(): void {
-
         this.serverPort = parseInt(process.env.SERVER_PORT ?? '52470');
         this.certsDir = path.resolve(UNIVERSAL.DATA_DIR, 'certs');
 
@@ -54,6 +55,13 @@ export class ExpressManager extends Manager {
         logger.silly("Certificates loaded successfully.");
 
         this.expressApp = express();
+        this.expressApp.set('trust proxy', true);
+        this.expressApp.use(cors({
+            origin: [process.env.WEB_URL!],
+            credentials: true
+        }));
+        this.expressApp.use(cookieParser());
+        this.expressApp.use(express.json());
         this.expressServer = https.createServer({
             key: this.certs.key,
             cert: this.certs.cert
@@ -61,7 +69,7 @@ export class ExpressManager extends Manager {
     }
 
     public async onStart(): Promise<void> {
-        this.expressApp.all('*', (req, res) => {
+        this.expressApp.all('*', this.caboose.getAuthManager().authenticationMiddleware.bind(this.caboose.getAuthManager()), (req, res) => {
             this.caboose.getRouteManager().handleAll(req, res);
         });
         this.expressServer.listen(this.serverPort, () => {
