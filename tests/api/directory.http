@@ -1,4 +1,0 @@
-GET http://127.0.0.1:52470/api/v1/directory
-    ?path=/
-    &recursive=false
-    &stats=false

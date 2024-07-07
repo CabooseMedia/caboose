@@ -1,11 +1,9 @@
-import winston from 'winston';
-import path from 'path';
+import environment from '@environment';
 
+import winston from 'winston';
 import chalk from 'chalk';
 
 const { combine, timestamp } = winston.format;
-
-const logDir = path.resolve(__dirname, '../../../data/logs');
 
 function colorize(level: string, message: string): string {
     switch (level) {
@@ -38,11 +36,12 @@ const LEVEL: string = process.env.LOG_LEVEL ?? 'info';
 
 const logger = winston.createLogger({
     transports: [
-        new winston.transports.Console({ level: LEVEL, format: combine(timestamp(), consoleFormat) }),
-        new winston.transports.File({ filename: `${logDir}/caboose.log`, level: 'debug', options: { flags: 'w' }, format: combine(timestamp(), fileFormat) }),
+        new winston.transports.Console({ level: LEVEL, format: combine(timestamp(), consoleFormat) })
     ]
 });
 
-logger.silly('Logger successfully imported and initialized.');
+export function setLoggerFileTransport(): void {
+    logger.add(new winston.transports.File({ filename: `${environment.CABOOSE_LOG_DIR}/caboose.log`, level: 'debug', options: { flags: 'w' }, format: combine(timestamp(), fileFormat) }));
+}
 
 export default logger;

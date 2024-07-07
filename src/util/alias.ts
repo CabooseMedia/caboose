@@ -4,16 +4,9 @@ import path from 'path';
 const srcDir = path.resolve(__dirname, '../');
 
 moduleAlias.addAliases({
-    "@caboose": path.resolve(srcDir),
-    "@caboose/server": path.resolve(srcDir, "CabooseServer"),
-    "@util": path.resolve(srcDir, "util"),
-    "@logger": path.resolve(srcDir, "util", "log"),
+    "@logger": path.resolve(srcDir, "util", "logger"),
+    "@environment": path.resolve(srcDir, "util", "environment"),
+    "@caboose": path.resolve(srcDir, "CabooseServer"),
+    "@caboose/manager": path.resolve(srcDir, "managers", "Manager"),
+    "@caboose/managers": path.resolve(srcDir, "managers"),
 });
-
-import logger from '@logger';
-
-logger.debug(`Server currently running in ${process.env.CABOOSE_SERVER_ENV} mode. Aliases set to ${path.resolve(srcDir)}`);
-
-logger.silly('Aliases successfully imported and initialized.');
-
-process.env.SRC = path.basename(srcDir);

@@ -1,53 +1,41 @@
-import { EventEmitter } from 'events';
-import { CabooseServer } from '@caboose/server';
-import { ManagerEvents } from '@caboose/events';
-import { EventType } from '@caboose/types';
+import CabooseServer from "@caboose";
 
-export class Manager extends EventEmitter {
+export default class Manager {
 
     protected caboose: CabooseServer;
 
-    constructor(server: CabooseServer) {
-        super();
-        this.caboose = server;
+    constructor(caboose: CabooseServer) {
+        this.caboose = caboose;
 
         this.initialize();
-
-        this.emit(ManagerEvents.INITIALIZED, {
-            name: this.constructor.name,
-        });
     }
 
-    public async setup(): Promise<void> {
-        await this.onSetup();
-
-        this.emit(ManagerEvents.SETUP, {
-            name: this.constructor.name,
-        });
+    public async onSetup(): Promise<void> {
+        await this.setup();
     }
 
-    public async start(): Promise<void> {
-        await this.onStart();
+    public async onStart(): Promise<void> {
+        await this.start();
+    }
 
-        this.emit(ManagerEvents.READY, {
-            name: this.constructor.name,
-        });
+    public async onStop(): Promise<void> {
+        await this.stop();
     }
 
     public initialize(): void {
         // Override this method
     }
 
-    public async onSetup(): Promise<void> {
+    public async setup(): Promise<void> {
         // Override this method
     }
 
-    public async onStart(): Promise<void> {
+    public async start(): Promise<void> {
         // Override this method
     }
 
-    public emit(event: EventType, ...args: any[]): boolean {
-        return this.caboose.emit(event, ...args);
+    public async stop(): Promise<void> {
+        // Override this method
     }
 
 }

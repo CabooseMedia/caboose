@@ -7,27 +7,36 @@
         "declaration": true,
         "esModuleInterop": true,
         "moduleResolution": "node",
-        "baseUrl": "src",
+        "baseUrl": ".",
         "paths": {
             "@logger": [
-                "util/log"
+                "src/util/logger"
             ],
-            "@util/*": [
-                "util/*"
+            "@environment": [
+                "src/util/environment"
             ],
-            "@caboose/server": [
-                "CabooseServer"
+            "@caboose": [
+                "src/CabooseServer"
+            ],
+            "@caboose/manager": [
+                "src/managers/Manager"
             ],
             "@caboose/managers": [
-                "managers/index"
+                "src/managers"
             ],
-            "@caboose/events": [
-                "events/index"
+            "@caboose/managers/*": [
+                "src/managers/*"
             ],
-            "@caboose/types": [
-                "types/index"
-            ]
-        }
+        },
+        "types": [
+            "node"
+        ],
+        "allowJs": true,
+        "skipLibCheck": true,
+        "noEmit": false,
+        "incremental": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true
     },
     "include": [
         "src/**/*.ts"

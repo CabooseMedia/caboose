@@ -1,129 +1,100 @@
-import logger from "@logger";
+import "dotenv/config";
+import "./util/alias";
 
-import { EventEmitter } from 'events';
-import { DownloadManager, ExpressManager, Manager, RouteManager, SocketManager, WebManager, DatabaseManager, APIManager, EmailManager, InviteManager, TranscodeManager, AuthManager } from "@caboose/managers";
-import { EventType } from "@caboose/types";
-import { ServerEvents } from "@caboose/events";
+import logger, { setLoggerFileTransport } from "@logger";
+import environment, { setupEnvironment } from "@environment";
 
-export class CabooseServer extends EventEmitter {
+import Manager from "@caboose/manager";
+import { ConfigManager, DatabaseManager, WebServerManager, PluginManager } from "@caboose/managers";
+
+export default class CabooseServer {
 
     private managers: Manager[];
-    private expressManager: ExpressManager;
-    private routeManager: RouteManager;
-    private authManager: AuthManager;
-    private socketManager: SocketManager;
-    private downloadManager: DownloadManager;
-    private webManager: WebManager;
+    private configManager: ConfigManager;
     private databaseManager: DatabaseManager;
-    private apiManager: APIManager;
-    private emailManager: EmailManager;
-    private inviteManager: InviteManager;
-    private transcodeManager: TranscodeManager;
+    private webServerManager: WebServerManager;
+    private pluginManager: PluginManager;
 
     constructor() {
-        super();
-
-        this.expressManager = new ExpressManager(this);
-        this.routeManager = new RouteManager(this);
-        this.authManager = new AuthManager(this);
-        this.socketManager = new SocketManager(this);
-        this.downloadManager = new DownloadManager(this);
-        this.webManager = new WebManager(this);
+        this.configManager = new ConfigManager(this);
         this.databaseManager = new DatabaseManager(this);
-        this.apiManager = new APIManager(this);
-        this.emailManager = new EmailManager(this);
-        this.inviteManager = new InviteManager(this);
-        this.transcodeManager = new TranscodeManager(this);
+        this.webServerManager = new WebServerManager(this);
+        this.pluginManager = new PluginManager(this);
 
         this.managers = [
-            this.expressManager,
-            this.routeManager,
-            this.authManager,
-            this.socketManager,
-            this.downloadManager,
-            this.webManager,
+            this.configManager,
             this.databaseManager,
-            this.apiManager,
-            this.emailManager,
-            this.inviteManager,
-            this.transcodeManager,
+            this.webServerManager,
+            this.pluginManager
         ];
 
-        this.emit(ServerEvents.INITIALIZED);
+        this.start();
     }
 
     public async start(): Promise<void> {
-        logger.debug("Starting managers...");
-        await this.setupManagers();
-        await this.startManagers();
-        this.emit(ServerEvents.READY);
+        logger.info("Welcome to Caboose! Getting things ready...");
+
+        setupEnvironment();
+        setLoggerFileTransport();
+
+        logger.verbose("Caboose environment setup complete.")
+        logger.verbose("Setting up managers...");
+
+        await this.setupAllManagers();
+        await this.startAllManagers();
+        
+        process.on("SIGINT", this.stop.bind(this));
+
+        logger.info("Caboose is ready! Enjoy!");
     }
 
-    public async setupManagers(): Promise<void> {
+    public async stop(): Promise<void> {
+        logger.verbose("Stopping...");
+        await this.stopAllManagers();
+        logger.verbose("Stopped!");
+        process.exit(0);
+    }
+
+    public async setupAllManagers(): Promise<void> {
         const promises = [];
         for (const manager of this.managers) {
-            promises.push(manager.setup());
+            promises.push(manager.onSetup());
         }
         await Promise.all(promises);
     }
-    
-    public async startManagers(): Promise<void> {
+
+    public async startAllManagers(): Promise<void> {
         const promises = [];
         for (const manager of this.managers) {
-            promises.push(manager.start());
+            promises.push(manager.onStart());
         }
         await Promise.all(promises);
     }
 
-    public getExpressManager(): ExpressManager {
-        return this.expressManager;
+    public async stopAllManagers(): Promise<void> {
+        const promises = [];
+        for (const manager of this.managers) {
+            promises.push(manager.onStop());
+        }
+        await Promise.all(promises);
     }
 
-    public getRouteManager(): RouteManager {
-        return this.routeManager;
-    }
-
-    public getSocketManager(): SocketManager {
-        return this.socketManager;
-    }
-
-    public getDownloadManager(): DownloadManager {
-        return this.downloadManager;
-    }
-
-    public getWebManager(): WebManager {
-        return this.webManager;
+    public getConfigManager(): ConfigManager {
+        return this.configManager;
     }
 
     public getDatabaseManager(): DatabaseManager {
         return this.databaseManager;
     }
 
-    public getAPIManager(): APIManager {
-        return this.apiManager;
+    public getWebServerManager(): WebServerManager {
+        return this.webServerManager;
     }
 
-    public getEmailManager(): EmailManager {
-        return this.emailManager;
-    }
-
-    public getInviteManager(): InviteManager {
-        return this.inviteManager;
-    }
-
-    public getTranscodeManager(): TranscodeManager {
-        return this.transcodeManager;
-    }
-
-    public getAuthManager(): AuthManager {
-        return this.authManager;
-    }
-
-    public emit(event: EventType, ...args: any[]): boolean {
-        logger.silly(`Emitting ${event.toString()}${args.length > 0 ? ` with args ${JSON.stringify(args)}` : ''}`);
-        return super.emit(event, ...args);
+    public getPluginManager(): PluginManager {
+        return this.pluginManager;
     }
 
 }
 
-logger.silly("CabooseServer class successfully imported.");
+new CabooseServer();
